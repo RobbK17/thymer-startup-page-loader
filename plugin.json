@@ -1,0 +1,9 @@
+{
+   "name": "Startup Page Loader",
+   "icon": "home",
+   "description": "Automatically loads a specific page when Thymer starts",
+   "ver": 1,
+   "custom": {
+      "startupPageGuid": null
+   }
+}
