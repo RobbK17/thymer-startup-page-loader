@@ -1,5 +1,5 @@
 /**
- * Startup Page Loader Plugin for Thymer v1.01
+ * Startup Page Loader Plugin for Thymer v1.02
  * 
  * Automatically navigates to a specific page when the application starts.
  */
@@ -7,14 +7,20 @@
 class Plugin extends AppPlugin {
   
     onLoad() {
-      // Wait for the app to fully initialize, then navigate
+      // Expose console toggle for enable/disable (e.g. homePageLoaderToggle())
+      if (typeof window !== 'undefined') {
+        window.homePageLoaderToggle = () => this.toggleEnabled();
+        window.homePageLoaderEnabled = () => this.isEnabled();
+      }
+      
+      // Wait for the app to fully initialize, then navigate (only if enabled)
       setTimeout(() => {
         this.loadStartupPage();
       }, 1500);
       
       // Add command to set the startup page
       this.ui.addCommandPaletteCommand({
-        label: 'HomePage: Set Current Page as Startup Page',
+        label: 'HomePage: Set Current Page as Startup',
         icon: 'home',
         onSelected: () => {
           this.setStartupPage();
@@ -29,11 +35,42 @@ class Plugin extends AppPlugin {
           this.loadStartupPage();
         }
       });
+      
+      // Add command to toggle plugin enabled/disabled
+      this.ui.addCommandPaletteCommand({
+        label: 'HomePage: Toggle Startup Loader (Enable/Disable)',
+        icon: 'settings',
+        onSelected: () => {
+          this.toggleEnabled();
+        }
+      });
+    }
+    
+    isEnabled() {
+      const config = this.getConfiguration();
+      const custom = config.custom || {};
+      return custom.enabled !== false;
+    }
+    
+    toggleEnabled() {
+      const config = this.getConfiguration();
+      config.custom = config.custom || {};
+      config.custom.enabled = !(config.custom.enabled !== false);
+      const pluginAPI = this.data.getPluginByGuid(this.getGuid());
+      if (pluginAPI) {
+        pluginAPI.saveConfiguration(config);
+      }
+      const state = config.custom.enabled ? 'enabled' : 'disabled';
+      this.showToast(`Startup Page Loader ${state}`, true);
+      return config.custom.enabled;
     }
     
     loadStartupPage() {
       const config = this.getConfiguration();
       const customSettings = config.custom || {};
+      if (customSettings.enabled === false) {
+        return;
+      }
       const startupPageGuid = customSettings.startupPageGuid;
       
       if (!startupPageGuid) {

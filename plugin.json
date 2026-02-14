@@ -1,5 +1,5 @@
 {
-	"ver": 1.01,
+	"ver": 1,
 	"name": "HomePage Loader",
 	"icon": "home",
 	"item_name": "Note",
@@ -17,7 +17,8 @@
 		"sidebar": false
 	},
 	"custom": {
-		"startupPageGuid": "1GKEC4FFVRZSJ0808P6MMQEJ1Z"
+		"startupPageGuid": null,
+		"enabled": true
 	},
 	"home": false
 }
