@@ -3,7 +3,7 @@
 	"name": "HomePage Loader",
 	"icon": "home",
 	"item_name": "Note",
-	"description": "Automatically loads a specific page when Thymer starts",
+	"description": "v1.0.3 — Automatically loads a specific page when Thymer starts",
 	"show_sidebar_items": true,
 	"show_cmdpal_items": true,
 	"views": [],
